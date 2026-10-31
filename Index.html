@@ -1,2 +1,111 @@
 # anshu-tools
 Free online tools website
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anshu Tools - Free Online Tools</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#f3f5fb;color:#20243a}
+header{background:#20243a;color:white;padding:25px 15px;text-align:center}
+header h1{margin:0;font-size:29px}
+header p{color:#cbd5e1}
+main{max-width:850px;margin:25px auto;padding:12px}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.card{background:white;padding:20px;border-radius:14px;box-shadow:0 3px 12px #0001}
+h2{font-size:19px}
+textarea,input{width:100%;padding:12px;border:1px solid #ccd2df;border-radius:8px;margin:8px 0;font-size:15px}
+button{background:#5145e5;color:white;border:0;padding:11px 15px;border-radius:8px;margin:4px;cursor:pointer}
+button:hover{background:#372bc0}
+.result{font-weight:bold;overflow-wrap:anywhere}
+footer{text-align:center;padding:25px;color:#777}
+</style>
+</head>
+<body>
+<header>
+<h1>⚡ Anshu Tools</h1>
+<p>Free Online Tools For Everyone</p>
+</header>
+<main>
+<h2>Explore Free Tools</h2>
+<div class="tools">
+
+<div class="card">
+<h2>📝 Word Counter</h2>
+<textarea id="words" placeholder="Type or paste your text..." oninput="countWords()"></textarea>
+<p id="count" class="result">Words: 0 | Characters: 0</p>
+</div>
+
+<div class="card">
+<h2>🔠 Text Case Converter</h2>
+<textarea id="caseText" placeholder="Enter your text..."></textarea>
+<button onclick="convert('upper')">UPPERCASE</button>
+<button onclick="convert('lower')">lowercase</button>
+<button onclick="convert('title')">Title Case</button>
+<p id="caseResult" class="result"></p>
+</div>
+
+<div class="card">
+<h2>🔢 Calculator</h2>
+<input id="calc" type="text" placeholder="Example: 25+30">
+<button onclick="calculate()">Calculate</button>
+<p id="answer" class="result">Result: </p>
+</div>
+
+<div class="card">
+<h2>🔐 Password Generator</h2>
+<input id="passLength" type="number" min="8" max="32" value="12">
+<button onclick="generate()">Generate Password</button>
+<p id="password" class="result"></p>
+</div>
+
+</div>
+</main>
+<footer>© 2026 Anshu Tools | Free Online Tools</footer>
+
+<script>
+function countWords(){
+let t=document.getElementById('words').value;
+let w=t.trim()?t.trim().split(/\s+/).length:0;
+document.getElementById('count').innerText=
+'Words: '+w+' | Characters: '+t.length;
+}
+function convert(type){
+let t=document.getElementById('caseText').value;
+if(type==='upper')t=t.toUpperCase();
+if(type==='lower')t=t.toLowerCase();
+if(type==='title')t=t.toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
+document.getElementById('caseResult').innerText=t;
+}
+function calculate(){
+let t=document.getElementById('calc').value.trim();
+if(!/^[0-9+\-*/().%\s]+$/.test(t)){
+document.getElementById('answer').innerText='Invalid calculation';
+return;
+}
+try{
+let r=Function('"use strict";return ('+t+')')();
+document.getElementById('answer').innerText=
+'Result: '+(Number.isFinite(r)?r:'Invalid');
+}catch(e){
+document.getElementById('answer').innerText='Invalid calculation';
+}
+}
+function generate(){
+let n=Number(document.getElementById('passLength').value);
+if(!Number.isInteger(n)||n<8||n>32){
+document.getElementById('password').innerText='Choose 8 to 32 characters';
+return;
+}
+let chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%';
+let arr=new Uint32Array(n);
+crypto.getRandomValues(arr);
+let p=Array.from(arr,x=>chars[x%chars.length]).join('');
+document.getElementById('password').innerText=p;
+}
+</script>
+</body>
+</html>
